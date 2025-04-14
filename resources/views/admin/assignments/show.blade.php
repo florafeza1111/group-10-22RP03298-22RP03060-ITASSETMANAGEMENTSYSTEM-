@@ -1,0 +1,104 @@
+@extends('layouts.app')
+
+@section('title', 'View Assignment')
+
+@section('content')
+<div class="container mx-auto px-4">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-semibold text-gray-800">Assignment Details</h1>
+        <a href="{{ route('admin.assignments.index') }}" 
+           class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            Back to List
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Asset Information -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Asset Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Asset Name</h3>
+                    <p class="text-gray-800">{{ $assignment->asset->name }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Category</h3>
+                    <p class="text-gray-800">{{ $assignment->asset->category }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Description</h3>
+                    <p class="text-gray-800 whitespace-pre-line">{{ $assignment->asset->description }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Defect Description</h3>
+                    <p class="text-gray-800 whitespace-pre-line">{{ $assignment->asset->defect_description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Information -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Assignment Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Assigned To</h3>
+                    <p class="text-gray-800">{{ $assignment->technician->name }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Technician Email</h3>
+                    <p class="text-gray-800">{{ $assignment->technician->email }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Assignment Date</h3>
+                    <p class="text-gray-800">{{ $assignment->created_at->format('M d, Y H:i A') }}</p>
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Status</h3>
+                    @if($assignment->fixed_at)
+                        @if($assignment->approved_by_admin)
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Approved
+                            </span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                Pending Approval
+                            </span>
+                        @endif
+                    @else
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                            In Progress
+                        </span>
+                    @endif
+                </div>
+                <div>
+                    <h3 class="text-gray-600 text-sm font-bold">Fixed Date</h3>
+                    <p class="text-gray-800">{{ $assignment->fixed_at ? $assignment->fixed_at->format('M d, Y H:i A') : 'Not fixed yet' }}</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                @if($assignment->fixed_at && !$assignment->approved_by_admin)
+                    <form action="{{ route('admin.assignments.update', $assignment) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" 
+                            class="w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            Approve Fix
+                        </button>
+                    </form>
+                @elseif(!$assignment->fixed_at)
+                    <form action="{{ route('admin.assignments.destroy', $assignment) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                            class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            onclick="return confirm('Are you sure you want to cancel this assignment?')">
+                            Cancel Assignment
+                        </button>
+                    </form>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
