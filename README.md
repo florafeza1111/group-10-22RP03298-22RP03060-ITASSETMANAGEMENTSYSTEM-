@@ -12,7 +12,7 @@ IT Assets Management System is a web-based application built with Laravel that h
 
 - User Authentication (Admin and Technician roles)
   Default admin username and password are in this seeders DatabaseSeeder.php
-  and the default Technician password is tec@123
+  The default Technician password is tec@123
   
 - Asset Management
 - Technician Management
