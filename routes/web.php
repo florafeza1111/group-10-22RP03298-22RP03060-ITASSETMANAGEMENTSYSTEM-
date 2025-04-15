@@ -8,7 +8,7 @@ use App\Http\Controllers\Technician\AssetController as TechnicianAssetController
 use App\Http\Controllers\Technician\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// All routes use web middleware group by default
+// All route use web middleware group by default
 Route::middleware('web')->group(function () {
     // Public routes
     Route::get('/', function () {
