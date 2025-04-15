@@ -66,7 +66,7 @@
                 @empty
                 <tr>
                     <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
-                        No assets assigned to you yet.
+                        No any assets assigned to you yet.
                     </td>
                 </tr>
                 @endforelse
